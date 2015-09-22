@@ -2,22 +2,26 @@
 #include <stdlib.h>
 #include <string.h>
 #include "queue.h"
+#include <stdbool.h>
+
+#define MAXWORD 1024
 
 int main()
 {
-  char *line = NULL;
-  size_t size;
+  FILE *infile;
+  infile = fopen("test","r");
   q_t *q=malloc(sizeof(*q));
-  char *buf;
-  int count =0;
+
+  char *line = NULL;
+  size_t len = 0;
   
-  while (getline(&line, &size, stdin) != -1) {
-    buf=malloc(sizeof(*line));
-    strcpy(buf,line);
-    enqueue(buf,q);
-    count++;
-    printf("%i",q->size);
+  while((getline(&line, &len, infile)) != -1){
+    enqueue(line,q);
   }
-  printf("%s\n",dequeue(q));
+
+  print_queue(q);
+  printf("Size:%i\n",q->size);
   del_queue(q);
+  free(q);
+  return 0;
 }
